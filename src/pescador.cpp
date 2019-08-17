@@ -46,9 +46,6 @@ void setup() {
 }
 
 void loop() {
-  int i = 0;
-  Serial.print(i);
-  i++;
   server.handleClient();          //Handle client requests
 }
 
