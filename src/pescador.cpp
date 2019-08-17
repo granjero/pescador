@@ -6,14 +6,15 @@ También aprovecha la idiotez ajena.
 // Includes
 #include <ESP8266WiFi.h>                        // https://github.com/esp8266/Arduino
 #include <WiFiClient.h>
+#include <DNSServer.h>
 #include <ESP8266WebServer.h>
-
 #include <EEPROM.h>
 
 // Cabeceras
 #include "pescador.h"                           // Cabeceras de Funciones y esas cosas
 
-ESP8266WebServer server(80);                    // Inicia Servidos en el puerto 80
+DNSServer dnsServer;                            // Inicia Servidor DNS (no?)
+ESP8266WebServer server(80);                    // Inicia Servidor web en el puerto 80
 
 void setup() {
   Serial.begin(115200);                                   // Inicia Puerto Serie 115200 baudios
@@ -31,6 +32,11 @@ void setup() {
   WiFi.softAP("Pescador", "00msdmi00");
   Serial.println(F("Wifi Iniciado."));
 
+  dnsServer.start(DNS_PORT, "*", local_IP);
+
+  // replay to all requests with same HTML
+  server.onNotFound([]() { handleRoot(); } );
+
   server.on("/", handleRoot);                               // Configura el servidor y las paginas disponibles
   server.on("/apescar", handleAPescar);
   server.on("/pescando", handlePescando);
@@ -45,6 +51,7 @@ void setup() {
 }
 
 void loop() {
+  dnsServer.processNextRequest();
   server.handleClient();                                    //Handle client requests
 }
 

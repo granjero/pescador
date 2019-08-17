@@ -2,7 +2,8 @@
 
 
 
-
+// Valores para el DNS captivePortal
+const byte DNS_PORT = 53;
 
 // Valores de la funcion softAPConfig
 IPAddress local_IP(192,168,4,1);
