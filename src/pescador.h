@@ -9,6 +9,11 @@ IPAddress local_IP(192,168,4,1);
 IPAddress gateway(192,168,4,1);
 IPAddress subnet(255,255,255,0);
 
+// Estamos pescando?
+bool pescando = false;
+
+// SSID a Pescar
+String ssid_a_pescar = "";
 
 /********************
         HTML
@@ -17,6 +22,7 @@ IPAddress subnet(255,255,255,0);
 // PAGINAS DISPONIBLES
 void    handleRoot();
 void    handleAPescar();
+void    handlePescando();
 void    handlePique();
 void    handleInfo();
 void    handleEeprom();
@@ -26,7 +32,6 @@ void    handleEepromDelete();
 String  listaWiFiHTML();
 int     calidadSenial(int RSSI);
 
-
 // Codigo HTML para servir
 const char HTML_Head[] PROGMEM                  = "<!DOCTYPE html><html lang=\"en\"> <head> <meta charset=\"UTF-8\" name=\"viewport\" content=\"width=device-width, initial-scale=1, user-scalable=no\"/> <title>Pescador</title>";
 const char HTML_Style[] PROGMEM                 = "<style> h1 {font-size: 3em;} </style>";
@@ -34,7 +39,7 @@ const char HTML_Style_Root[] PROGMEM            = "<style>.c{text-align: center;
 const char HTML_Head_end[] PROGMEM              = "</head> <body> ";
 const char HTML_end[] PROGMEM                   = "</body> </html>";
 
-const char HTML_Formulario[] PROGMEM            = "<form method=\"get\" action=\"penscando\" id=\"f\" >";
+const char HTML_Formulario[] PROGMEM            = "<form method=\"get\" action=\"pescando\" id=\"f\" >";
 const char HTML_Formulario_end[] PROGMEM        = "</form>";
 
 const char HTML_Formulario_Root[] PROGMEM       = "<p>Para navegar ingrese la contraseña:</p><form method=\"get\" action=\"pique\" id=\"f\" > <input <input id='p' name='p' length=64 type='password' placeholder='contraseña'> <br/> </form> <br /> <button type=\"submit\" form=\"f\" value=\"conectar\"> Conectar </button> ";
