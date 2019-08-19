@@ -66,6 +66,9 @@ void handleRoot()
   String pagina = FPSTR(HTML_Head);
   pagina += FPSTR(HTML_Style_Root);
   pagina += FPSTR(HTML_Head_end);
+  pagina += String(F("<h2>&#128246;  "));
+  pagina += ssid_a_pescar;
+  pagina += String(F("</h2>"));
   pagina += FPSTR(HTML_Formulario_Root);
   pagina += FPSTR(HTML_end);
 
